@@ -1,14 +1,17 @@
 import { test } from '@playwright/test';
+import { getUrl, getLocator } from './config/config.js';
+
 
 test.describe.serial('Get Results', () => {
   // test attributes
   test.beforeAll(async ({ page }) => {
-    const url = 'ENCRYPTED_TO_URL';
-    await page.goto(`${url}ENCRYPTED_TO_ID`);
+    const url = getUrl();
+    await page.goto(url);
   });
   test('Get all results', async ({ page }) => {
-    const locator = "//span[text()='CMP']//ancestor::div[contains(@class, 'FAILED')]";
-    const progressContainer = "div.custom-progress-bar-container";
+    const locator = getLocator();
+    console.log(locator);
+    /*const progressContainer = "div.custom-progress-bar-container";
     const passed = "div[class*='PASSED']";
     const failed = "div[class*='FAILED']";
     const progress = "div[class*='IN_PROGRESS']";
@@ -61,6 +64,6 @@ test.describe.serial('Get Results', () => {
       } catch {
         await failedSteps.nth(i).click();
       }
-    }
+    }*/
   });
 });
