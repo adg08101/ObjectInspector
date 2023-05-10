@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
-import { getUrl, getLocator } from './config/config.js';
+import { getUrl, getLocator, getServer, getDB } from './config/config.js';
+const mongoose = require('mongoose');
 
 
 test.describe.serial('Get Results', () => {
@@ -10,60 +11,32 @@ test.describe.serial('Get Results', () => {
   });
   test('Get all results', async ({ page }) => {
     const locator = getLocator();
-    console.log(locator);
-    /*const progressContainer = "div.custom-progress-bar-container";
-    const passed = "div[class*='PASSED']";
-    const failed = "div[class*='FAILED']";
-    const progress = "div[class*='IN_PROGRESS']";
-    const executed = "div[class*='NOT_EXECUTED']";
-    const comps = "//span[text()='TC']//ancestor::div[contains(@class, 'FAILED')]";
-    const cases = "//span[text()='Steps']//ancestor::div[contains(@class, 'FAILED')]";
-    const fails = "//span[@class='e-icons e-image']//ancestor::div[contains(@class, 'FAILED')]";
-    const folder = "span[class*='e-icons e-folder']";
-    try {
-      await page.waitForSelector(locator, {
-        timeout: 5000,
-      });
-    } catch { }
-    for (let i = 0;i < 10;i++) {
-      await page.waitForSelector(progressContainer);
-      await page.locator(progressContainer).locator(passed).click();
-      await page.locator(progressContainer).locator(failed).click();
-      await page.locator(progressContainer).locator(progress).click();
-      await page.locator(progressContainer).locator(executed).click();
+    const count = await page.locator(locator).count();
+    main().catch(err => console.log(err));
+    const elementSchema = new mongoose.Schema({
+      text: String
+    });
+    elementSchema.methods.getText = function getText() {
+      const result = this.text
+        ? `post text: ${this.text}`
+        : `no data to show`;
+      console.log(result);
+    };
+    async function main() {
+      await mongoose.connect(`${getServer()}${getDB()}`);
+    };
+    const elementModel = mongoose.model("elements", elementSchema);
+    for (var i = 0; i < count; i++) {
+      var obj = page.locator(locator).nth(i);
+      console.log(i + 1);
+      var inner = await obj.innerText();
+      console.log(inner);
+      var elementObj = new elementModel({ text: `${inner}` });
+      elementObj.save();
+      console.log(`mongodb: ${elementObj.text}`);
+      elementObj.getText();
     }
-    const rows = page.locator(locator);
-    let count = await rows.count();
-    for (let i = 0;i < count;i++) {
-      await rows.nth(i).click();
-    }
-    const components = page.locator(comps);
-    count = await components.count();
-    for (let i = 0;i < count;i++) {
-      await components.nth(i).click();
-    }
-    const steps = page.locator(cases);
-    count = await steps.count();
-    for (let i = 0;i < count;i++) {
-      await steps.nth(i).click();
-    }
-    for (let i = 0;i < 5;i++) {
-      await page.waitForSelector(progressContainer);
-      await page.locator(progressContainer).locator(passed).click();
-      await page.locator(progressContainer).locator(failed).click();
-      await page.locator(progressContainer).locator(progress).click();
-      await page.locator(progressContainer).locator(executed).click();
-    }
-    const failedSteps = page.locator(fails);
-    count = await failedSteps.count();
-    for (let i = 0;i < count;i++) {
-      try {
-        await failedSteps.nth(i).locator(folder).click({
-          timeout: 1000,
-        });
-      } catch {
-        await failedSteps.nth(i).click();
-      }
-    }*/
+    const posts = await elementModel.find();
+    console.log(posts);
   });
 });
