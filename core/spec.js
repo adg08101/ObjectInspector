@@ -21,7 +21,7 @@ test.describe.serial('Get Results', () => {
     // Method example
     elementSchema.methods.getText = function getText() {
       const result = this.text
-        ? `post text: ${this.text}`
+        ? `post text: ${this.text} for selector: ${this.selector}`
         : `no data to show`;
       console.log(result);
     };
