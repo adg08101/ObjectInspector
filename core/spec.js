@@ -60,7 +60,7 @@ test.describe.serial('Get Results', () => {
     // GET INNER
 
     // COMPARE FUNCTION ===========
-    if (getElement.text == inner) {
+    if (getElement && (getElement.text == inner)) {
       console.log(`****** ${getElement.text == inner} for no changes. ******`);
       return;
     } else {
