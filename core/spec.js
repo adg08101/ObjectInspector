@@ -26,17 +26,19 @@ test.describe.serial('Get Results', () => {
 
     // Schema generator
     const elementSchema = new mongoose.Schema({
-      text: String,
+      innerText: String,
       selector: String,
+      url: String,
     });
     // Schema generator
 
     // Method example
-    elementSchema.methods.getText = function getText() {
-      const result = this.text
-        ? `post text: ${this.text} for selector: ${this.selector}`
-        : `no data to show`;
-      console.log(result);
+    elementSchema.methods.getInner = function getInner() {
+      const result = this.innerText
+        ? `post text: ${this.innerText} for selector: ${this.selector}`
+        : `no data to show this time`;
+      // console.log(result);
+      return result;
     };
     // Method example
 
@@ -51,7 +53,7 @@ test.describe.serial('Get Results', () => {
     // Model
 
     // GET FUNCTION ===========
-    const getElement = await elementModel.find({ selector: getLocator() });
+    const getElement = await elementModel.findOne({ selector: getLocator() }).exec();
     // GET FUNCTION ===========
 
     // GET INNER
@@ -60,11 +62,11 @@ test.describe.serial('Get Results', () => {
     // GET INNER
 
     // COMPARE FUNCTION ===========
-    if (getElement && (getElement.text == inner)) {
-      console.log(`****** ${getElement.text == inner} for no changes. ******`);
+    if (getElement && (getElement.innerText == inner && getElement.url == getUrl())) {
+      console.log(`****** ${getElement.innerText == inner && getElement.url == getUrl()} for no changes. ******`);
       return;
     } else {
-      console.log(`****** ${getElement.text == inner} for no changes. ******`);
+      console.log(`****** Changed. Or brand new element. ******`);
     }
     // COMPARE FUNCTION ===========
 
@@ -74,13 +76,14 @@ test.describe.serial('Get Results', () => {
       // console.log(i + 1);
       // console.log(inner);
       var elementObj = new elementModel({
-        text: `${inner}`,
+        innerText: `${inner}`,
         selector: `${getLocator()}`,
+        url: `${getUrl()}`,
       });
       elementObj.save();
 
       // console.log(`mongodb: ${elementObj.text}`);
-      // elementObj.getText();
+      // elementObj.getInner();
     }
     // Main func
     // SAVE FUNCTION ===========
