@@ -29,6 +29,7 @@ test.describe.serial('Get Results', () => {
       innerText: String,
       selector: String,
       url: String,
+      date: String,
     });
     // Schema generator
 
@@ -66,7 +67,10 @@ test.describe.serial('Get Results', () => {
       console.log(`****** ${getElement.innerText == inner && getElement.url == getUrl()} for no changes. ******`);
       return;
     } else {
-      console.log(`****** Changed. Or brand new element. ******`);
+      const message = getElement ?
+        `****** Changed. ******` :
+        `Or brand new element`;
+      console.log(message);
     }
     // COMPARE FUNCTION ===========
 
@@ -79,6 +83,7 @@ test.describe.serial('Get Results', () => {
         innerText: `${inner}`,
         selector: `${getLocator()}`,
         url: `${getUrl()}`,
+        date: `${new Date()}`,
       });
       elementObj.save();
 
