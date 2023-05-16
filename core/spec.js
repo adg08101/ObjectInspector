@@ -27,6 +27,7 @@ test.describe.serial('Get Results', () => {
     // Schema generator
     const elementSchema = new mongoose.Schema({
       innerText: String,
+      innerHTML: String,
       selector: String,
       url: String,
       date: String,
@@ -60,6 +61,7 @@ test.describe.serial('Get Results', () => {
     // GET INNER
     var obj = page.locator(locator).first();
     var inner = await obj.innerText();
+    var html = await obj.innerHTML();
     // GET INNER
 
     // COMPARE FUNCTION ===========
@@ -81,6 +83,7 @@ test.describe.serial('Get Results', () => {
       // console.log(inner);
       var elementObj = new elementModel({
         innerText: `${inner}`,
+        innerHTML: `${html}`,
         selector: `${getLocator()}`,
         url: `${getUrl()}`,
         date: `${new Date()}`,
