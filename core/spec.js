@@ -90,13 +90,12 @@ test.describe.serial('Get Results', () => {
       });
       elementObj.save();
 
-      // console.log(`mongodb: ${elementObj.text}`);
-      // elementObj.getInner();
+      elementObj.getInner();
     }
     // Main func
     // SAVE FUNCTION ===========
 
-    // const posts = await elementModel.find();
-    // console.log(posts);
+    const posts = await elementModel.find();
+    console.log(posts);
   });
 });
