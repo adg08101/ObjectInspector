@@ -79,8 +79,6 @@ test.describe.serial('Get Results', () => {
     // SAVE FUNCTION ===========
     // Main func
     for (var i = 0; i < count; i++) {
-      // console.log(i + 1);
-      // console.log(inner);
       var elementObj = new elementModel({
         innerText: `${inner}`,
         innerHTML: `${html}`,
